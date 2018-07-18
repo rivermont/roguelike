@@ -20,7 +20,26 @@ import constants
 
 class Object:
     """The base object class for everything in the game."""
+    pass
+
+
+class Item(Object):
+    """A wrapper class for items in the game."""
+    def __init__(self):
+        super(Item, self).__init__()
+
+
+class Tile(Object):
+    """The main class for all tiles in the game."""
+    def __init__(self, passable=True, block_sight=False):
+        super(Tile, self).__init__()
+        self.passable = passable
+        self.block_sight = block_sight
+
+
+class Entity(Object):
     def __init__(self, x, y, sprite):
+        super(Entity, self).__init__()
         self.x = x
         self.y = y
         self.sprite = sprite
@@ -28,38 +47,36 @@ class Object:
     def draw(self):
         SURFACE_MAIN.blit(self.sprite, (self.x*constants.TILE_SIZE, self.y*constants.TILE_SIZE))
 
-
-class Item(Object):
-    """A wrapper class for items in the game."""
-    pass
-
-
-class Tile(Object):
-    """The main class for all tiles in the game."""
-    def __init__(self, passable=True, block_sight=False):
-        super(Tile, self).__init__(0, 0, constants.S_PLAYER)
-        self.passable = passable
-        self.block_sight = block_sight
-
-
-class Entity(Object):
-    pass
+    def move(self, dx, dy):
+        if GAME_MAP.map[self.x+dx][self.y+dy].passable:
+            self.x += dx
+            self.y += dy
+        else:
+            # Can't move onto that tile
+            pass
 
 
 class Player(Entity):
-    sprite = constants.S_PLAYER
+    def __init__(self, x, y):
+        super(Player, self).__init__(x, y, constants.S_PLAYER)
 
 
 class NPC(Entity):
-    pass
+    def __init__(self, x, y, sprite=None):
+        # TODO: Need default NPC sprite
+        super(NPC, self).__init__(x, y, sprite)
 
 
 class Monster(Entity):
-    pass
+    def __init__(self, x, y):
+        sprite = None
+        super(Monster, self).__init__(x, y, sprite)
 
 
 class Shopkeep(NPC):
-    pass
+    def __init__(self, x, y):
+        sprite = None
+        super(Shopkeep, self).__init__(x, y, sprite)
 
 
 #  _____                   _
@@ -80,7 +97,7 @@ def draw_window():
     draw_map(Map(constants.DEFAULT_MAP_W, constants.DEFAULT_MAP_H))
 
     # Draw entities
-    SURFACE_MAIN.blit(constants.S_PLAYER, (0, 0))
+    PLAYER.draw()
 
     # Update display
     pygame.display.flip()
@@ -126,11 +143,8 @@ class Map:
 def game_main_loop():
 
     running = True
-    # frame = 0
 
     while running:
-        # print(frame)
-        # frame += 1
 
         try:
             # Get user inputs
@@ -141,6 +155,15 @@ def game_main_loop():
                 print(event.type)
                 if event.type == pygame.QUIT:
                     running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        PLAYER.move(0, -1)
+                    if event.key == pygame.K_DOWN:
+                        PLAYER.move(0, 1)
+                    if event.key == pygame.K_LEFT:
+                        PLAYER.move(-1, 0)
+                    if event.key == pygame.K_RIGHT:
+                        PLAYER.move(1, 0)
 
         except KeyboardInterrupt:
             running = False
@@ -161,7 +184,7 @@ def game_init():
 
     GAME_MAP = Map(constants.DEFAULT_MAP_W, constants.DEFAULT_MAP_H)
 
-    PLAYER = Player(0, 0, constants.S_PLAYER)
+    PLAYER = Player(0, 0)
 
 
 #  ██▀███      █    ██     ███▄    █
