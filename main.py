@@ -87,8 +87,7 @@ class Shopkeep(NPC):
 # |_____/|_|   \_||_|\____|_|_| |_|\_|| |
 #                                 (_____|
 
-def draw_window():
-    global SURFACE_MAIN
+def draw_game():
 
     # Clear the window
     SURFACE_MAIN.fill(constants.BACKGROUND_COLOR)
@@ -104,7 +103,6 @@ def draw_window():
 
 
 def draw_map(map_):
-    global SURFACE_MAIN
 
     for x in range(0, map_.width):
         for y in range(0, map_.height):
@@ -146,16 +144,18 @@ def game_main_loop():
 
     while running:
 
+        print(int(clock.get_fps()))
+
         try:
             # Get user inputs
             events = pygame.event.get()
 
             # Process inputs
             for event in events:
-                print(event.type)
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
+                    # Arrow key movement
                     if event.key == pygame.K_UP:
                         PLAYER.move(0, -1)
                     if event.key == pygame.K_DOWN:
@@ -169,14 +169,18 @@ def game_main_loop():
             running = False
 
         # Draw the game window
-        draw_window()
+        draw_game()
+
+        clock.tick()
 
     pygame.quit()
     exit()
 
 
 def game_init():
-    global SURFACE_MAIN, GAME_MAP, PLAYER
+    global SURFACE_MAIN, GAME_MAP, PLAYER, clock
+
+    clock = pygame.time.Clock()
 
     pygame.init()
 
@@ -199,5 +203,4 @@ def game_init():
 
 if __name__ == '__main__':
     game_init()
-
     game_main_loop()
