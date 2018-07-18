@@ -3,7 +3,7 @@ A simple roguelike game written in Python 3 and using Pygame.
 
 **Currently in no way polished.**
 
-I am roughly following Michael Coates' (The Terrible Programmer) [tutorial on YouTube](https://www.youtube.com/playlist?list=PLKUel_nHsTQ1yX7tQxR_SQRdcOFyXfNAb).<br>
+I am roughly following Michael Coates (The Terrible Programmer)'s [tutorial on YouTube](https://www.youtube.com/playlist?list=PLKUel_nHsTQ1yX7tQxR_SQRdcOFyXfNAb).<br>
 I'm also utilizing the many amazing resources provided on [RogueBasin](http://www.roguebasin.com/index.php?title=Articles).<br>
 The ASCII text art was made with [this tool](http://patorjk.com/software/taag/).
 

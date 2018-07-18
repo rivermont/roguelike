@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import pygame
 
 import constants
@@ -14,9 +15,10 @@ import constants
 # --> Tile
 # --> Entity
 #     --> Player
-#     --> NPC
-#         --> Shopkeep
-#     --> Monster
+#     --> Creature
+#          --> NPC
+#              --> Shopkeep
+#          --> Monster
 
 class Object:
     """The base object class for everything in the game."""
@@ -24,13 +26,24 @@ class Object:
 
 
 class Item(Object):
-    """A wrapper class for items in the game."""
+    """Base class for items in the game."""
+
     def __init__(self):
         super(Item, self).__init__()
+        pass
 
 
 class Tile(Object):
-    """The main class for all tiles in the game."""
+    """
+    The main class for all tiles in the game.
+    This can apply to basic tiles like floors and walls,
+    or to other things such as placed items.
+
+    Args:
+        passable (bool): Whether entities can pathfind and walk on this tile.
+        block_sight (bool): Whether line of sight is stopped by this tile.
+    """
+
     def __init__(self, passable=True, block_sight=False):
         super(Tile, self).__init__()
         self.passable = passable
@@ -38,6 +51,16 @@ class Tile(Object):
 
 
 class Entity(Object):
+    """
+    Base class for entities in the game.
+    Entities can move, interact with tiles, items and other entities and take damage.
+
+    Args:
+        x (int): The map coordinate (not pixel coordinate) of the entity at creation.
+        y (int): The map coordinate (not pixel coordinate) of the entity at creation.
+        sprite (pygame.Surface): An image.
+    """
+
     def __init__(self, x, y, sprite):
         super(Entity, self).__init__()
         self.x = x
@@ -57,23 +80,57 @@ class Entity(Object):
 
 
 class Player(Entity):
+    """The player character."""
+
     def __init__(self, x, y):
         super(Player, self).__init__(x, y, constants.S_PLAYER)
 
 
-class NPC(Entity):
-    def __init__(self, x, y, sprite=None):
-        # TODO: Need default NPC sprite
-        super(NPC, self).__init__(x, y, sprite)
+class Creature(Entity):
+    """
+    Wrapper class for entities other than the player character.
+    Handles things such as AI.
+
+    Args:
+        name (str): A name for the creature.
+        hp (int): Number of hit points the creature starts with.
+    """
+
+    def __init__(self, x, y, sprite, name="", hp=-1):
+        super(Creature, self).__init__(x, y, sprite)
+        self.name = name
+        self.hp = hp
+
+    # TODO: Attack function
+
+    # TODO: Death behaviour
+
+    # TODO: AI
 
 
-class Monster(Entity):
+class Monster(Creature):
+    """Any creature passively hostile towards the player character."""
+
     def __init__(self, x, y):
         sprite = None
         super(Monster, self).__init__(x, y, sprite)
 
 
+class NPC(Creature):
+    """Non-hostile characters in game that the player can interact with."""
+
+    def __init__(self, x, y, sprite=None):
+        # TODO: Need default NPC sprite
+        super(NPC, self).__init__(x, y, sprite)
+
+    # TODO: Dialogue AI and trading
+
+
 class Shopkeep(NPC):
+    """
+    TODO
+    """
+
     def __init__(self, x, y):
         sprite = None
         super(Shopkeep, self).__init__(x, y, sprite)
@@ -88,12 +145,12 @@ class Shopkeep(NPC):
 #                                 (_____|
 
 def draw_game():
+    """Draws the game window."""
 
     # Clear the window
     SURFACE_MAIN.fill(constants.BACKGROUND_COLOR)
 
-    # Draw background
-    draw_map(Map(constants.DEFAULT_MAP_W, constants.DEFAULT_MAP_H))
+    draw_map(GAME_MAP)
 
     # Draw entities
     PLAYER.draw()
@@ -103,7 +160,12 @@ def draw_game():
 
 
 def draw_map(map_):
+    """
+    Draws the map onto the main surface.
 
+    Args:
+        map_ (Map):
+    """
     for x in range(0, map_.width):
         for y in range(0, map_.height):
             if map_.map[x][y].passable:
@@ -122,6 +184,9 @@ def draw_map(map_):
 #              |_|
 
 class Map:
+    """
+    TODO
+    """
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -139,9 +204,10 @@ class Map:
 #  \_____/ \_||_|_|_|_|\____)
 
 def game_main_loop():
-
+    """
+    TODO
+    """
     running = True
-
     while running:
 
         print(int(clock.get_fps()))
@@ -178,6 +244,9 @@ def game_main_loop():
 
 
 def game_init():
+    """
+    TODO
+    """
     global SURFACE_MAIN, GAME_MAP, PLAYER, clock
 
     clock = pygame.time.Clock()

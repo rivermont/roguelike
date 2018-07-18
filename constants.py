@@ -1,6 +1,21 @@
 import pygame
-
 pygame.init()
+
+
+def load_img(name):
+    """
+    Load an image from the assets folder.
+
+    Args:
+        name (str): Simple name of the image to load, without extension.
+    """
+    try:
+        img = pygame.image.load('assets/{0}.png'.format(name))
+    except pygame.error:
+        img = pygame.image.load('./assets/{0}.png'.format(name))
+
+    return img
+
 
 GAME_WIDTH = 800
 GAME_HEIGHT = 600
@@ -21,6 +36,6 @@ BACKGROUND_COLOR = COLOR_BLACK
 
 # Sprites
 
-S_PLAYER = pygame.image.load('./assets/angel.png')
-S_FLOOR = pygame.image.load('./assets/dirt1.png')
-S_WALL = pygame.image.load('./assets/dirt2.png')
+S_PLAYER = load_img('angel')
+S_FLOOR = load_img('dirt1')
+S_WALL = load_img('dirt2')
