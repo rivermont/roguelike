@@ -71,11 +71,15 @@ class Entity(Object):
         SURFACE_MAIN.blit(self.sprite, (self.x*constants.TILE_SIZE, self.y*constants.TILE_SIZE))
 
     def move(self, dx, dy):
-        if GAME_MAP.map[self.x+dx][self.y+dy].passable:
-            self.x += dx
-            self.y += dy
-        else:
-            # Can't move onto that tile
+        try:
+            if GAME_MAP.map[self.x+dx][self.y+dy].passable:
+                self.x += dx
+                self.y += dy
+            else:
+                # Can't move onto that tile
+                pass
+        except IndexError:
+            # Location outside of map
             pass
 
 

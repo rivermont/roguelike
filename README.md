@@ -42,3 +42,10 @@ Roguelike RPG Game
 - Area map below stats
 - Menu button(s) and controls in bottom right
 </pre>
+
+### Asset Attribution
+I would like to properly credit all content creators whose stuff I'm using (within license).
+
+* [Vital Zigns - War Platformer Tileset](https://vitalzigns.itch.io/war-platformer-tileset)
+  - Tiles files prefixed with `vz_`
+* [Alex's Assets - 16x16 RPG Item pack](https://alexs-assets.itch.io/16x16-rpg-item-pack)
